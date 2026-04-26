@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Deteksi Gejala Fisik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Outfit"', 'sans-serif'] },
+                    colors: {
+                        primary: '#4f46e5',   // Indigo 600
+                        primary_hover: '#4338ca', // Indigo 700
+                        accent: '#06b6d4',    // Cyan 500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* Beautiful mesh gradient background */
+            background-color: #f0fdfa;
+            background-image: 
+                radial-gradient(at 40% 20%, hsla(228,100%,74%,0.2) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189,100%,56%,0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355,100%,93%,0.3) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, hsla(340,100%,76%,0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(22,100%,77%,0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(242,100%,70%,0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, hsla(343,100%,76%,0.1) 0px, transparent 50%);
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(79, 70, 229, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15);
+        }
+
+        /* Clean General Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            padding: 15px 0;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #e0e7ff;
+            border-radius: 99px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -8px;
+            border: 3px solid #4f46e5;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background: #e0e7ff;
+        }
+
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(0.95);
+        }
+
+        /* Header Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(90deg, #4f46e5, #06b6d4);
+        }
+
+        /* Fancy Button */
+        .btn-fancy {
+            background-image: linear-gradient(to right, #4f46e5, #06b6d4, #4f46e5);
+            background-size: 200% auto;
+            transition: 0.5s;
+        }
+
+        .btn-fancy:hover {
+            background-position: right center;
+            box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4);
+        }
+    </style>
+</head>
+
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="bg-white/60 backdrop-blur-md border-b border-white/50 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
+                    <i data-lucide="activity" class="w-5 h-5"></i>
+                </div>
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Sistem <span class="text-gradient">Fuzzy</span></h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 pt-12">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-16 animate-[fadeIn_0.5s_ease-out]">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight">
+                Evaluasi <span class="text-gradient">Gejala Fisik</span>
+            </h2>
+            <p class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Ketahui tingkat respons fisik Anda terhadap tekanan. Geser indikator di bawah sesuai dengan intensitas gejala yang Anda rasakan akhir-akhir ini.
+            </p>
+        </div>
+
+        <section id="sect-fuzzy" class="animate-[fadeIn_0.7s_ease-out]">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Inputs -->
+                <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-slate-800 flex items-center gap-2"><i data-lucide="heart-pulse"
+                                    class="w-5 h-5 text-accent"></i> Palpitasi</h3>
+                            <span class="text-2xl font-bold text-primary" id="v-palp">50</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4 h-10 leading-relaxed">Intensitas jantung berdebar tanpa penyebab fisik yang jelas.</p>
+                        <input type="range" id="palpitation" value="50"
+                            oninput="document.getElementById('v-palp').innerText=this.value">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
+                            <span>Rendah</span><span>Tinggi</span></div>
+                    </div>
+
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-slate-800 flex items-center gap-2"><i data-lucide="moon-star"
+                                    class="w-5 h-5 text-accent"></i> Insomnia</h3>
+                            <span class="text-2xl font-bold text-primary" id="v-ins">50</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4 h-10 leading-relaxed">Kesulitan untuk memulai atau mempertahankan tidur.</p>
+                        <input type="range" id="insomnia" value="50"
+                            oninput="document.getElementById('v-ins').innerText=this.value">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
+                            <span>Rendah</span><span>Tinggi</span></div>
+                    </div>
+
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-slate-800 flex items-center gap-2"><i data-lucide="person-standing"
+                                    class="w-5 h-5 text-accent"></i> Otot Kaku</h3>
+                            <span class="text-2xl font-bold text-primary" id="v-musc">50</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4 h-10 leading-relaxed">Frekuensi otot terasa tegang (leher, bahu, atau rahang).</p>
+                        <input type="range" id="muscle_tension" value="50"
+                            oninput="document.getElementById('v-musc').innerText=this.value">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
+                            <span>Rendah</span><span>Tinggi</span></div>
+                    </div>
+
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-slate-800 flex items-center gap-2"><i
+                                    data-lucide="coffee" class="w-5 h-5 text-accent"></i> Pencernaan</h3>
+                            <span class="text-2xl font-bold text-primary" id="v-dig">50</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4 h-10 leading-relaxed">Tingkat mual atau sakit perut yang muncul saat cemas.</p>
+                        <input type="range" id="digestive" value="50"
+                            oninput="document.getElementById('v-dig').innerText=this.value">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1 font-medium">
+                            <span>Rendah</span><span>Tinggi</span></div>
+                    </div>
+
+                    <div class="sm:col-span-2 mt-4">
+                        <button onclick="processFuzzy()" id="btn-calc"
+                            class="w-full btn-fancy text-white font-bold text-lg py-4 rounded-xl flex justify-center items-center gap-2">
+                            Kalkulasi Data Fisik <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <div class="lg:col-span-4">
+                    <div class="glass-card p-8 h-full flex flex-col justify-center items-center text-center relative overflow-hidden">
+                        <!-- Decorative background circle -->
+                        <div class="absolute -top-16 -right-16 w-32 h-32 bg-primary/5 rounded-full blur-2xl"></div>
+                        
+                        <p class="text-sm font-bold text-primary uppercase tracking-widest mb-8">Hasil Sugeno</p>
+
+                        <div
+                            class="w-40 h-40 rounded-full border-8 border-white/60 flex items-center justify-center mb-8 bg-white/40 shadow-inner backdrop-blur-sm transition-all duration-500" id="circle-score">
+                            <span id="f-score" class="text-6xl font-extrabold text-slate-400">--</span>
+                        </div>
+
+                        <div id="f-result" class="opacity-0 transition-opacity duration-500 w-full z-10">
+                            <div class="p-6 rounded-2xl bg-white/60 border border-white/80 shadow-sm backdrop-blur-md">
+                                <h4 id="f-status" class="text-2xl font-bold mb-3 text-slate-800">--</h4>
+                                <p id="f-desc" class="text-sm text-slate-600 leading-relaxed font-medium">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <script>
+        lucide.createIcons();
+
+        async function processFuzzy() {
+            const btn = document.getElementById('btn-calc');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Memproses...';
+            lucide.createIcons();
+
+            try {
+                const req = await fetch('/api/fuzzy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        palpitation: document.getElementById('palpitation').value,
+                        insomnia: document.getElementById('insomnia').value,
+                        muscle_tension: document.getElementById('muscle_tension').value,
+                        digestive: document.getElementById('digestive').value
+                    })
+                });
+                const res = await req.json();
+
+                document.getElementById('f-score').innerText = res.score;
+                document.getElementById('f-status').innerText = res.status;
+                document.getElementById('f-desc').innerText = res.description;
+                document.getElementById('f-result').style.opacity = 1;
+
+                const scoreEl = document.getElementById('f-score');
+                const statusEl = document.getElementById('f-status');
+                const circleEl = document.getElementById('circle-score');
+
+                if (res.color === 'green') {
+                    scoreEl.className = 'text-6xl font-extrabold text-emerald-500';
+                    statusEl.className = 'text-2xl font-bold text-emerald-600 mb-3';
+                    circleEl.className = 'w-40 h-40 rounded-full border-8 border-emerald-100 flex items-center justify-center mb-8 bg-emerald-50 shadow-inner backdrop-blur-sm transition-all duration-500 shadow-lg shadow-emerald-500/20';
+                } else if (res.color === 'yellow') {
+                    scoreEl.className = 'text-6xl font-extrabold text-amber-500';
+                    statusEl.className = 'text-2xl font-bold text-amber-600 mb-3';
+                    circleEl.className = 'w-40 h-40 rounded-full border-8 border-amber-100 flex items-center justify-center mb-8 bg-amber-50 shadow-inner backdrop-blur-sm transition-all duration-500 shadow-lg shadow-amber-500/20';
+                } else {
+                    scoreEl.className = 'text-6xl font-extrabold text-rose-500';
+                    statusEl.className = 'text-2xl font-bold text-rose-600 mb-3';
+                    circleEl.className = 'w-40 h-40 rounded-full border-8 border-rose-100 flex items-center justify-center mb-8 bg-rose-50 shadow-inner backdrop-blur-sm transition-all duration-500 shadow-lg shadow-rose-500/20';
+                }
+
+            } catch (e) {
+                alert('Terjadi kesalahan koneksi server.');
+            } finally {
+                btn.innerHTML = originalBtnText;
+            }
+        }
+    </script>
+</body>
+</html>

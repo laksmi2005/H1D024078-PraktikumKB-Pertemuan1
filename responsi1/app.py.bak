@@ -1,0 +1,144 @@
+from flask import Flask, render_template, request, jsonify
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+
+app = Flask(__name__)
+
+# ==========================================
+# 🧠 FUZZY LOGIC: GEJALA FISIK KECEMASAN
+# ==========================================
+def calculate_physical_anxiety(palpitation, insomnia, muscle_tension, digestive):
+    # Antecedents (Inputs 0-100)
+    p = ctrl.Antecedent(np.arange(0, 101, 1), 'palpitation')
+    i = ctrl.Antecedent(np.arange(0, 101, 1), 'insomnia')
+    m = ctrl.Antecedent(np.arange(0, 101, 1), 'muscle_tension')
+    d = ctrl.Antecedent(np.arange(0, 101, 1), 'digestive')
+    
+    # Consequent (Output: Severity 0-100)
+    severity = ctrl.Consequent(np.arange(0, 101, 1), 'severity')
+
+    # Membership Functions
+    p.automf(3, names=['rendah', 'sedang', 'tinggi'])
+    i.automf(3, names=['rendah', 'sedang', 'tinggi'])
+    m.automf(3, names=['rendah', 'sedang', 'tinggi'])
+    d.automf(3, names=['rendah', 'sedang', 'tinggi'])
+
+    severity['aman'] = fuzz.trimf(severity.universe, [0, 15, 35])
+    severity['waspada'] = fuzz.trimf(severity.universe, [25, 50, 75])
+    severity['kritis'] = fuzz.trimf(severity.universe, [65, 85, 100])
+
+    # Sugeno-like mapping Rules (Combining 4 variables)
+    rules = [
+        ctrl.Rule(p['rendah'] & i['rendah'] & m['rendah'] & d['rendah'], severity['aman']),
+        ctrl.Rule((p['sedang'] | i['sedang']) & m['rendah'], severity['waspada']),
+        ctrl.Rule(m['sedang'] & d['sedang'], severity['waspada']),
+        ctrl.Rule((p['tinggi'] | i['tinggi']) & (m['sedang'] | d['sedang']), severity['kritis']),
+        ctrl.Rule(p['tinggi'] & i['tinggi'] & m['tinggi'], severity['kritis']),
+        ctrl.Rule(m['tinggi'] | d['tinggi'], severity['waspada']),
+        ctrl.Rule((p['tinggi'] | m['tinggi']) & d['tinggi'], severity['kritis'])
+    ]
+
+    anxiety_ctrl = ctrl.ControlSystem(rules)
+    sim = ctrl.ControlSystemSimulation(anxiety_ctrl)
+
+    sim.input['palpitation'] = palpitation
+    sim.input['insomnia'] = insomnia
+    sim.input['muscle_tension'] = muscle_tension
+    sim.input['digestive'] = digestive
+    
+    sim.compute()
+    result_score = sim.output['severity']
+
+    # Classification
+    if result_score < 30: status, color, desc = "Normal / Aman", "green", "Gejala fisik masih dalam batas wajar. Tetap jaga pola hidup sehat."
+    elif result_score < 70: status, color, desc = "Waspada (Gejala Sedang)", "yellow", "Tubuh mulai menunjukkan tanda stres berlebih. Disarankan latihan relaksasi pernapasan."
+    else: status, color, desc = "Kritis (Gejala Parah)", "red", "Gejala fisik sangat nyata (Psikosomatis). Sangat disarankan berkonsultasi dengan tenaga profesional."
+
+    return {
+        "score": round(result_score, 1),
+        "status": status,
+        "color": color,
+        "description": desc
+    }
+
+# ==========================================
+# 🔍 EXPERT SYSTEM: DIAGNOSA PSIKOLOGIS (CF)
+# ==========================================
+# Gejala Anxiety dan Bobot Pakarnya (MB - MD disederhanakan ke Weight)
+ANXIETY_RULES = {
+    "Generalized Anxiety Disorder (GAD)": [
+        {"q": "q1", "weight": 0.8}, # Overthinking
+        {"q": "q2", "weight": 0.7}, # Gelisah
+        {"q": "q3", "weight": 0.6}, # Lelah terus menerus
+        {"q": "q4", "weight": 0.8}, # Sulit konsentrasi / pikiran kosong
+        {"q": "q5", "weight": 0.6}  # Mudah marah / tersinggung
+    ],
+    "Panic Disorder": [
+        {"q": "q6", "weight": 0.9}, # Sesak/Gemetar tiba-tiba
+        {"q": "q7", "weight": 0.8}, # Takut kehilangan kendali
+        {"q": "q8", "weight": 0.7}  # Merasa ada bahaya mengancam
+    ],
+    "Social Anxiety": [
+        {"q": "q9", "weight": 0.9}, # Menghindari interaksi sosial
+        {"q": "q10", "weight": 0.8} # Takut dihakimi orang
+    ]
+}
+
+def calculate_psychological_cf(responses):
+    final_diagnoses = []
+    
+    for disorder, symptoms in ANXIETY_RULES.items():
+        cf_combine = 0
+        is_first = True
+        
+        for s in symptoms:
+            # User input from 0 (Tidak Pernah) to 1 (Sangat Sering)
+            cf_user = float(responses.get(s["q"], 0)) 
+            cf_rule = cf_user * s["weight"]
+            
+            if is_first:
+                cf_combine = cf_rule
+                is_first = False
+            else:
+                cf_combine = cf_combine + cf_rule * (1 - cf_combine)
+        
+        if cf_combine > 0.1: # Minimal threshold
+            final_diagnoses.append({
+                "disorder": disorder,
+                "confidence": round(cf_combine * 100, 1),
+                "severity": "Tinggi" if cf_combine > 0.7 else "Sedang" if cf_combine > 0.4 else "Rendah"
+            })
+            
+    return sorted(final_diagnoses, key=lambda x: x['confidence'], reverse=True)
+
+# --- FLASK ROUTES ---
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/fuzzy', methods=['POST'])
+def api_fuzzy():
+    data = request.json
+    try:
+        res = calculate_physical_anxiety(
+            float(data['palpitation']), 
+            float(data['insomnia']),
+            float(data['muscle_tension']),
+            float(data['digestive'])
+        )
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/api/audit', methods=['POST'])
+def api_audit():
+    data = request.json
+    try:
+        res = calculate_psychological_cf(data.get('responses', {}))
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
