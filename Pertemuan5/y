@@ -1,0 +1,12 @@
+ ("G1", "nafas abnormal"), ("G2", "suara serak"), ("G3", "perubahan kulit"),
+    ("G4", "telinga penuh"), ("G5", "nyeri bicara menelan"), ("G6", "nyeri tenggorokan"),
+    ("G7", "nyeri leher"), ("G8", "pendarahan hidung"), ("G9", "telinga berdenging"),
+    ("G10", "air liur menetes"), ("G11", "perubahan suara"), ("G12", "sakit kepala"),
+    ("G13", "nyeri pinggir hidung"), ("G14", "serangan vertigo"), ("G15", "getah bening"),
+    ("G16", "leher bengkak"), ("G17", "hidung tersumbat"), ("G18", "infeksi sinus"),
+    ("G19", "berat badan turun"), ("G20", "nyeri telinga"), ("G21", "selaput lendir merah"),
+    ("G22", "benjolan leher"), ("G23", "tubuh tak seimbang"), ("G24", "bola mata bergerak"),
+    ("G25", "nyeri wajah"), ("G26", "dahi sakit"), ("G27", "batuk"),
+    ("G28", "tumbuh dimulut"), ("G29", "benjolan dileher"), ("G30", "nyeri antara mata"),
+    ("G31", "radang gendang telinga"), ("G32", "tenggorokan gatal"), ("G33", "hidung meler"),
+    ("G34", "tuli"), ("G35", "mual muntah"), ("G36", "letih lesu"), ("G37", "demam")

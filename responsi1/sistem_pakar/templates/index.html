@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesmen Psikologis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Outfit"', 'sans-serif'] },
+                    colors: {
+                        primary: '#4f46e5',   // Indigo 600
+                        accent: '#8b5cf6',    // Violet 500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* Beautiful mesh gradient background */
+            background-color: #f5f3ff;
+            background-image: 
+                radial-gradient(at 10% 20%, hsla(253,100%,74%,0.2) 0px, transparent 50%),
+                radial-gradient(at 90% 0%, hsla(289,100%,76%,0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(255,100%,93%,0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 50%, hsla(240,100%,76%,0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(22,100%,77%,0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(242,100%,70%,0.2) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, hsla(343,100%,76%,0.05) 0px, transparent 50%);
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Clean Radio Buttons */
+        .custom-radio {
+            display: none;
+        }
+
+        .custom-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 2px solid rgba(203, 213, 225, 0.4);
+            color: #64748b;
+            font-weight: 500;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .custom-label:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.1);
+        }
+
+        .custom-radio:checked+.custom-label {
+            background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+            color: #ffffff;
+            border-color: transparent;
+            font-weight: 600;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Header Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(90deg, #4f46e5, #8b5cf6);
+        }
+
+        /* Fancy Button */
+        .btn-fancy {
+            background-image: linear-gradient(to right, #4f46e5, #8b5cf6, #4f46e5);
+            background-size: 200% auto;
+            transition: 0.5s;
+        }
+
+        .btn-fancy:hover:not(:disabled) {
+            background-position: right center;
+            box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .progress-gradient {
+            background-image: linear-gradient(90deg, #4f46e5, #8b5cf6);
+        }
+    </style>
+</head>
+
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="bg-white/60 backdrop-blur-md border-b border-white/50 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
+                    <i data-lucide="brain" class="w-5 h-5"></i>
+                </div>
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Sistem <span class="text-gradient">Pakar</span></h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pt-12">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-16 animate-[fadeIn_0.5s_ease-out]">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight">
+                Asesmen <span class="text-gradient">Psikologis</span>
+            </h2>
+            <p class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Pahami kondisi emosional Anda melalui pendekatan Certainty Factor. Jawab setiap pertanyaan dengan jujur sesuai yang Anda rasakan belakangan ini.
+            </p>
+        </div>
+
+        <section id="sect-expert" class="animate-[fadeIn_0.7s_ease-out]">
+            <div class="glass-card p-8 md:p-12 mb-8 relative overflow-hidden">
+                <!-- Decorative blurred shape -->
+                <div class="absolute -top-32 -left-32 w-64 h-64 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div id="q-container" class="relative z-10">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- Report Card -->
+            <div id="expert-report" class="hidden glass-card p-8 md:p-12 bg-white/80 border border-white/80 mt-12 animate-[fadeIn_0.5s_ease-out]">
+                <div class="flex flex-col items-center justify-center mb-10 pb-8 border-b border-slate-200/50 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-500/30 mb-4 transform -rotate-3">
+                        <i data-lucide="clipboard-check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-bold text-3xl text-slate-800">Hasil Diagnosis Anda</h3>
+                    <p class="text-slate-500 mt-2">Dianalisis menggunakan metode Certainty Factor</p>
+                </div>
+
+                <div id="report-content" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Content -->
+                </div>
+
+                <div class="mt-12 pt-6 border-t border-slate-200/50 text-center">
+                    <p class="text-xs text-slate-400 max-w-xl mx-auto mb-6 leading-relaxed">
+                        Catatan Peringatan: Harap diingat bahwa sistem ini hanyalah alat bantu asesmen awal dan tidak memiliki validitas diagnostik secara medis. Jangan jadikan hasil ini sebagai acuan tunggal. Jika Anda merasa terganggu atau membutuhkan kepastian diagnosis, sangat disarankan untuk segera berkonsultasi dengan profesional kesehatan mental (seperti Psikolog atau Psikiater).
+                    </p>
+                    <button onclick="resetAssessment()" class="inline-flex items-center gap-2 text-slate-500 hover:text-primary font-medium transition-colors bg-white hover:bg-slate-50 px-6 py-3 rounded-xl border border-slate-200 shadow-sm mx-auto">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Mulai Ulang Asesmen
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+
+    <script>
+        lucide.createIcons();
+
+        const questions = [
+            { id: 'q1', t: 'Merasa khawatir berlebihan terhadap kemungkinan buruk yang belum terjadi.' },
+            { id: 'q2', t: 'Merasa gelisah, tegang, atau kesulitan untuk rileks tanpa alasan yang jelas.' },
+            { id: 'q3', t: 'Mengalami kelelahan mental meskipun tidak melakukan aktivitas fisik yang berat.' },
+            { id: 'q4', t: 'Kesulitan untuk berkonsentrasi atau pikiran tiba-tiba menjadi kosong.' },
+            { id: 'q5', t: 'Mudah terpancing emosi, marah, atau merasa tersinggung oleh hal-hal kecil.' },
+            { id: 'q6', t: 'Pernah mengalami serangan panik mendadak yang disertai sesak napas atau gemetar.' },
+            { id: 'q7', t: 'Merasa takut kehilangan kendali atas diri sendiri saat menghadapi situasi yang mencemaskan.' },
+            { id: 'q8', t: 'Merasa seolah-olah ada bahaya besar yang mengancam meskipun berada di lingkungan aman.' },
+            { id: 'q9', t: 'Cenderung menghindari situasi sosial atau interaksi karena takut merasa cemas.' },
+            { id: 'q10', t: 'Merasa sangat takut dihakimi, diperhatikan secara negatif, atau dipermalukan di depan umum.' }
+        ];
+
+        let currentStep = 0;
+        let answers = {};
+
+        function renderQuestion() {
+            const qContainer = document.getElementById('q-container');
+            const q = questions[currentStep];
+            
+            // Progress
+            const progressPct = ((currentStep + 1) / questions.length) * 100;
+            
+            let html = `
+                <div class="mb-10">
+                    <div class="flex justify-between items-end mb-3">
+                        <span class="text-xs font-bold text-accent uppercase tracking-widest bg-accent/10 px-3 py-1 rounded-full">Pertanyaan ${currentStep + 1} / ${questions.length}</span>
+                        <span class="text-sm font-bold text-primary">${Math.round(progressPct)}%</span>
+                    </div>
+                    <div class="h-2 w-full bg-slate-100/50 rounded-full overflow-hidden shadow-inner backdrop-blur-sm">
+                        <div class="h-full progress-gradient rounded-full transition-all duration-700 ease-out" style="width: ${progressPct}%"></div>
+                    </div>
+                </div>
+
+                <div class="animate-[scaleIn_0.4s_ease-out]">
+                    <h3 class="font-bold text-slate-800 text-2xl md:text-3xl mb-10 leading-tight">${q.t}</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            `;
+            
+            const options = [
+                {v: '0', l: 'Tidak Pernah'},
+                {v: '0.3', l: 'Jarang'},
+                {v: '0.7', l: 'Sering'},
+                {v: '1.0', l: 'Selalu'}
+            ];
+
+            options.forEach(opt => {
+                const isChecked = answers[q.id] === opt.v ? 'checked' : '';
+                html += `
+                    <div>
+                        <input type="radio" name="${q.id}" id="${q.id}-${opt.v}" value="${opt.v}" class="custom-radio" onchange="handleSelect('${opt.v}')" ${isChecked}>
+                        <label for="${q.id}-${opt.v}" class="custom-label w-full text-center py-5 shadow-sm">${opt.l}</label>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            
+            // Navigation buttons
+            html += `<div class="flex justify-between items-center mt-12 pt-8 border-t border-slate-200/50">`;
+            
+            if(currentStep > 0) {
+                html += `<button onclick="prevStep()" class="px-6 py-3 text-slate-500 font-semibold hover:bg-slate-100/80 rounded-xl transition-all flex items-center gap-2"><i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali</button>`;
+            } else {
+                html += `<div></div>`;
+            }
+            
+            if(currentStep === questions.length - 1) {
+                const canSubmit = Object.keys(answers).length === questions.length;
+                html += `
+                    <button onclick="processExpert()" class="px-8 btn-fancy text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none" ${canSubmit ? '' : 'disabled'} id="btn-submit">
+                        Proses Hasil Asesmen <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </button>`;
+            } else {
+                html += `<div></div>`;
+            }
+            
+            html += `</div>`;
+            qContainer.innerHTML = html;
+            
+            lucide.createIcons();
+        }
+
+        function handleSelect(val) {
+            const q = questions[currentStep];
+            answers[q.id] = val;
+            renderQuestion();
+
+            if (currentStep < questions.length - 1) {
+                setTimeout(() => {
+                    currentStep++;
+                    renderQuestion();
+                }, 350); 
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderQuestion();
+            }
+        }
+        
+        function resetAssessment() {
+            currentStep = 0;
+            answers = {};
+            document.getElementById('expert-report').classList.add('hidden');
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        renderQuestion();
+
+        async function processExpert() {
+            if (Object.keys(answers).length < questions.length) {
+                alert('Mohon lengkapi semua pertanyaan terlebih dahulu.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit');
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Memproses...';
+            lucide.createIcons();
+
+            try {
+                const req = await fetch('/api/audit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ responses: answers })
+                });
+                const res = await req.json();
+
+                const repContainer = document.getElementById('report-content');
+                repContainer.innerHTML = '';
+
+                if (res.length === 0) {
+                    repContainer.innerHTML = `<div class="p-6 bg-emerald-50 border-2 border-emerald-100 rounded-2xl text-emerald-800 col-span-full font-medium shadow-sm flex items-start gap-4"><i data-lucide="shield-check" class="w-8 h-8 text-emerald-500 shrink-0 mt-1"></i><div><h4 class="font-bold text-xl mb-1">Aman & Terkendali</h4><p>Tidak terdeteksi indikasi gangguan kecemasan yang signifikan dari respons Anda. Pertahankan gaya hidup sehat Anda!</p></div></div>`;
+                } else {
+                    res.forEach(item => {
+                        let colorClass = item.severity === 'Tinggi' ? 'bg-rose-500' : (item.severity === 'Sedang' ? 'bg-amber-500' : 'bg-emerald-500');
+                        let textClass = item.severity === 'Tinggi' ? 'text-rose-700' : (item.severity === 'Sedang' ? 'text-amber-700' : 'text-emerald-700');
+                        let bgClass = item.severity === 'Tinggi' ? 'bg-rose-50 border-rose-100' : (item.severity === 'Sedang' ? 'bg-amber-50 border-amber-100' : 'bg-emerald-50 border-emerald-100');
+
+                        repContainer.innerHTML += `
+                            <div class="p-6 bg-white border border-slate-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h4 class="font-bold text-slate-800 text-base w-3/4">${item.disorder}</h4>
+                                    <span class="text-2xl font-black ${textClass}">${item.confidence}%</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-4 shadow-inner">
+                                    <div class="h-full ${colorClass} rounded-full" style="width: ${item.confidence}%"></div>
+                                </div>
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${bgClass} ${textClass} text-xs font-bold uppercase tracking-wider">
+                                    <div class="w-2 h-2 rounded-full ${colorClass}"></div> Indikasi ${item.severity}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                lucide.createIcons();
+                const reportDiv = document.getElementById('expert-report');
+                reportDiv.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    reportDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+
+            } catch (e) {
+                alert('Terjadi kesalahan saat menghubungi server.');
+            } finally {
+                btn.innerHTML = 'Proses Hasil Asesmen <i data-lucide="sparkles" class="w-5 h-5"></i>';
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>

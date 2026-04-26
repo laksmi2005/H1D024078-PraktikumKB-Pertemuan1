@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
 
-# DATABASE: Data Penyakit & Gejala Sesuai Modul Praktikum 5
 database_tht = {
     "Tonsilitis": ["G37", "G12", "G5", "G27", "G6", "G21"],
     "Sinusitis Maksilaris": ["G37", "G12", "G27", "G17", "G33", "G36", "G29"],
@@ -28,7 +27,6 @@ database_tht = {
     "Vertigo Postular": ["G24"]
 }
 
-# DAFTAR GEJALA (G1-G37)
 daftar_gejala = [
     ("G1", "nafas abnormal"), ("G2", "suara serak"), ("G3", "perubahan kulit"),
     ("G4", "telinga penuh"), ("G5", "nyeri bicara menelan"), ("G6", "nyeri tenggorokan"),
@@ -53,7 +51,6 @@ class THTExpertInLine:
         self.gejala_terpilih = []
         self.index = 0
 
-        # Frame Utama agar di tengah
         self.main_frame = tk.Frame(root)
         self.main_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
@@ -78,7 +75,6 @@ class THTExpertInLine:
 
     def update_pertanyaan(self):
         if self.index < len(daftar_gejala):
-            # Teks disambung jadi satu kalimat
             self.lbl_tanya.config(text=f"Apakah Anda mengalami gejala {daftar_gejala[self.index][1]}?")
         else:
             self.tampilkan_hasil()

@@ -9,7 +9,7 @@ data_parent = [
 ]
 
 # ATURAN: Sibling (Saudara Kandung)
-# X dan Y adalah saudara jika memiliki orang tua (Z) yang sama dan X != Y
+# X dan Y adalah saudara jika memiliki orang tua (Z) yang sama dan X != Y [cite: 124, 127]
 def get_siblings(target):
     parents = [p for p, c in data_parent if c == target]
     siblings = set()
@@ -19,7 +19,7 @@ def get_siblings(target):
     return list(siblings)
 
 # ATURAN: Grandparent (Kakek/Nenek)
-# X adalah kakek/nenek Y jika X orang tua Z, dan Z orang tua Y
+# X adalah kakek/nenek Y jika X orang tua Z, dan Z orang tua Y [cite: 135, 137]
 def get_grandparents(target_cucu):
     results = []
     # Cari orang tua dari si cucu
